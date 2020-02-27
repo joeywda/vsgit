@@ -1,0 +1,54 @@
+﻿@model WebApplication1.ViewModels.AlbumViewModel
+@*判斷是否有登入，若有登入顯示上傳相片表單*@
+@if (User.Identity.IsAuthenticated)
+{
+    @*上傳圖片按鈕，並設定開啟跳窗*@
+    <input class="btn btn-default" type="button" value="上傳圖片" data-toggle="modal" data-target="#UploadModal" />
+    @*上傳圖片表單跳窗*@
+    <div class="modal fade" id="UploadModal" tabindex="-1" role="dialog" aria-labelledby="UploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        &times;
+                    </button>
+                    <h3 class="modal-title">
+                        @Html.DisplayNameFor(model => model.upload)
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        @using (Html.BeginForm("Upload", "Album", FormMethod.Post,
+                            new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.upload, new
+                                {
+                                @class = "col-xs-4 form-label"
+                                })
+                                <div class="col-xs-8">
+                                    @Html.TextBoxFor(model => model.upload, new
+                                    { @class = "form-control", type = "file" })
+                                    @Html.ValidationMessageFor(model => model.upload
+                                    , null, new { @class = "label label-danger" })
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary" id="uploadBtn" type="button"
+                           value="上傳圖片" />
+                    <input class="btn btn-default" data-dismiss="modal" type="button"
+                           value="取消" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <span>要上傳相片請先</span>
+    @Html.ActionLink("登入", "Login", "Members")
+}

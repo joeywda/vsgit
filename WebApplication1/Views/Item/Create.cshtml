@@ -1,0 +1,51 @@
+﻿@model WebApplication1.ViewModels.ItemCreateViewModel
+
+@{
+    ViewBag.Title = "新增商品";
+}
+@*匯入驗證所需的JavaScript*@
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+@*標題*@
+<div class="page-header">
+    <h1>新增商品</h1>
+</div>
+<div class="form-horizontal">
+    @*建立新增商品所須的表單*@
+    @using (Html.BeginForm("Add", "Item", FormMethod.Post
+        , new { enctype = "multipart/form-data" }))
+    {
+        @*顯示彙總的表單驗證的錯誤訊息*@
+        <div class="alert alert-warning">
+            @Html.ValidationSummary()
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewData.Name, new { @class = "col-xs-4 col-md-1 form-label" })
+            <div class="col-xs-8 col-md-11">
+                @Html.TextBoxFor(model => model.NewData.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NewData.Name, null, new { @class = "label label-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NewData.Price, new { @class = "col-xs-4 col-md-1 form-label" })
+            <div class="col-xs-8 col-md-11">
+                @Html.TextBoxFor(model => model.NewData.Price, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.NewData.Price, null, new { @class = "label label-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ItemImage, new { @class = "col-xs-4 col-md-1 form-label" })
+            <div class="col-xs-8 col-md-11">
+                @Html.TextBoxFor(model => model.ItemImage, new { @class = "form-control", type = "file" })
+                @Html.ValidationMessageFor(model => model.ItemImage, null, new { @class = "label label-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-10">
+                <input class="btn btn-primary" type="submit" value="新增商品" />
+            </div>
+        </div>
+    }
+</div>

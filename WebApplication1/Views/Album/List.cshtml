@@ -1,0 +1,147 @@
+﻿@model WebApplication1.ViewModels.AlbumViewModel
+@*相片列表表格*@
+<div class="table-responsive">
+    <table class="table table-hover">
+        @*若資料庫中有相片資料，將會列出相片資料*@
+        @if (!Model.FileList.Count.Equals(0))
+        {
+            <thead>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FileList[0].FileName)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FileList[0].Account)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FileList[0].CreateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.FileList[0].Size)
+                    </td>
+                    <td>
+                        圖片
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            foreach (var item in Model.FileList)
+            {
+                <tr>
+                    <td>
+                        @item.FileName
+                    </td>
+                    <td>
+                        @item.Member.Name
+                    </td>
+                    <td>
+                        @item.CreateTime
+                    </td>
+                    <td>
+                        @item.Size
+                    </td>
+                    <td id="Picture_@(item.Alb_Id)">
+                        @Html.ActionLink("顯示圖片", "Show", new { Alb_Id = item.Alb_Id }
+                        , new { @class = "showImgLink" })
+                    </td>
+                    <td>
+                        @Html.ActionLink("下載圖片", "DownloadFile", new
+                        {
+                        Alb_Id = item.Alb_Id
+                        })
+                    </td>
+                    <td>
+                        @Html.ActionLink("刪除圖片", "DeleteFile", new
+                        {
+                        Alb_Id = item.Alb_Id
+                        })
+                    </td>
+                </tr>
+            }
+        }
+        @*若無相片，則印出"尚未有相片"*@
+        else
+        {
+            <tr>
+                <td colspan="3">
+                    尚未有相片
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+@*產生頁碼按鈕*@
+<div class="col-xs-12 text-center">
+    <ul class="pagination">
+        @*顯示上一頁與最前頁按鈕*@
+        <li class="first @((Model.Paging.NowPage > 1) ? "" : " disabled")">
+            @Ajax.ActionLink("<<", "List", new { Page = 1 },
+                new AjaxOptions
+                     {
+                         UpdateTargetId = "AlbumListBlock"
+                ,
+                         InsertionMode = InsertionMode.Replace
+                     })
+        </li>
+        <li class="pervious @((Model.Paging.NowPage > 1) ? "" : " disabled")">
+            @Ajax.ActionLink("<", "List", new { Page = Model.Paging.NowPage - 1 },
+                new AjaxOptions
+                     {
+                         UpdateTargetId = "AlbumListBlock"
+                ,
+                         InsertionMode = InsertionMode.Replace
+                     })
+        </li>
+        @*顯示各個頁次按鈕*@
+        @for (var page = (Model.Paging.NowPage - 6);
+                page < (Model.Paging.NowPage + 6); page++)
+        {
+            if ((page > 0) && (page <= Model.Paging.MaxPage))
+            {
+                if (page == Model.Paging.NowPage)
+                {
+                    <li class="active">
+                        <a href="#">@page</a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        @Ajax.ActionLink(page.ToString(), "List", new { Page = page },
+                            new AjaxOptions
+                                 {
+                                     UpdateTargetId = "AlbumListBlock"
+                            ,
+                                     InsertionMode = InsertionMode.Replace
+                                 })
+                    </li>
+                }
+            }
+        }
+        @*顯示下一頁與最後一頁的按鈕*@
+        <li class="next @(((Model.Paging.NowPage < Model.Paging.MaxPage)
+        ? "" : " disabled"))">
+            @Ajax.ActionLink(">", "List", new { Page = Model.Paging.NowPage + 1 },
+                new AjaxOptions
+                     {
+                         UpdateTargetId = "AlbumListBlock"
+                ,
+                         InsertionMode = InsertionMode.Replace
+                     })
+        </li>
+        <li class="last @(((Model.Paging.NowPage < Model.Paging.MaxPage)
+        ? "" : " disabled"))">
+            @Ajax.ActionLink(">>", "List", new { Page = Model.Paging.MaxPage },
+                new AjaxOptions
+                     {
+                         UpdateTargetId = "AlbumListBlock"
+                ,
+                         InsertionMode = InsertionMode.Replace
+                     })
+        </li>
+    </ul>
+</div>
+

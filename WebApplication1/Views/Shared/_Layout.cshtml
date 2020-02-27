@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 我的 ASP.NET 應用程式</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("我的購物網站", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li style="color:white">您好，@(User.Identity.Name)</li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("相簿", "Index", "Album")</li>
+                        }
+                        <li>@Html.ActionLink("我的部落格", "Index", "Blog", new { Account = User.Identity.Name }, null)</li>
+                        <li>@Html.ActionLink("購物車", "Index", "Cart")</li>
+                        <li>@Html.ActionLink("2D試衣間", "Index2", "Default",null, new { target = "_blank" })</li>
+                        <li>@Html.ActionLink("變更密碼", "ChangePassword", "Members")</li>
+                        <li>@Html.ActionLink("登出", "Logout", "Members")</li>
+                    }
+                    @*若無使用者登入，則列出兩個連結*@
+                    else
+                    {
+                        <li>@Html.ActionLink("註冊", "Register", "Members")</li>
+                        <li>@Html.ActionLink("登入", "Login", "Members")</li>
+                    }
+                    @*<li class="nav-item ml-4 mt-1"><a href="~/website/index.html" class="nav-link text-warning" target="_blank">Burger TEST</a></li>*@
+                    <li class="nav-item ml-4 mt-1"><a href="https://qwerasdf1205.000webhostapp.com/Index.html" class="nav-link text-warning" target="_blank">3D TEST</a></li>
+                    <li class="nav-item ml-4 mt-1"><a href="http://foolhardy-entry.000webhostapp.com/Index.html" class="nav-link text-warning" target="_blank" >NET TEST</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            @*<p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式</p>*@
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

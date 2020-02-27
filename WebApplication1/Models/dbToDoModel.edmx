@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="dbToDoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'ASP.NET MVC.dbo.tToDo' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="tToDo">
+          <Key>
+            <PropertyRef Name="fId" />
+          </Key>
+          <Property Name="fId" Type="int" Nullable="false" />
+          <Property Name="fTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="fImage" Type="nvarchar" MaxLength="50" />
+          <Property Name="fImage2" Type="nvarchar" MaxLength="50" />
+          <Property Name="fDate" Type="date" />
+        </EntityType>
+        <EntityContainer Name="dbToDoModelStoreContainer">
+          <EntitySet Name="tToDo" EntityType="Self.tToDo" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tToDo].[fId] AS [fId], 
+    [tToDo].[fTitle] AS [fTitle], 
+    [tToDo].[fImage] AS [fImage], 
+    [tToDo].[fImage2] AS [fImage2], 
+    [tToDo].[fDate] AS [fDate]
+    FROM [dbo].[tToDo] AS [tToDo]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbToDoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tToDo">
+          <Key>
+            <PropertyRef Name="fId" />
+          </Key>
+          <Property Name="fId" Type="Int32" Nullable="false" />
+          <Property Name="fTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fImage2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityContainer Name="dbToDoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tToDo" EntityType="Self.tToDo" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbToDoModelStoreContainer" CdmEntityContainer="dbToDoEntities">
+          <EntitySetMapping Name="tToDo">
+            <EntityTypeMapping TypeName="dbToDoModel.tToDo">
+              <MappingFragment StoreEntitySet="tToDo">
+                <ScalarProperty Name="fId" ColumnName="fId" />
+                <ScalarProperty Name="fTitle" ColumnName="fTitle" />
+                <ScalarProperty Name="fImage" ColumnName="fImage" />
+                <ScalarProperty Name="fImage2" ColumnName="fImage2" />
+                <ScalarProperty Name="fDate" ColumnName="fDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

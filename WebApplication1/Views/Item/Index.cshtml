@@ -1,0 +1,128 @@
+﻿@model WebApplication1.ViewModels.ItemViewModel
+@{
+    ViewBag.Title = "商品首頁";
+}
+
+<div id="ItemList" class="table-responsive">
+    @*標題*@
+    <div class="page-header">
+        <h1>商品項目</h1>
+    </div>
+    <table class="table table-hover">
+        @*判斷使否有資料傳入*@
+        @if (!Model.IdList.Count.Equals(0))
+        {
+            @*計算列數，每5個一列*@
+            int row = Convert.ToInt32(Math.Ceiling(
+                Convert.ToDouble(Model.IdList.Count) / 5));
+            for (int r = 0; r < row; r++)
+            {
+
+                for (int i = 5 * r; i < (r + 1) * 5; i++)
+                {
+                    if (i < Model.IdList.Count)
+                    {
+                        <tr>
+                            <td id="ItemBlock-@(Model.IdList[i])">
+                                @Html.Partial("ItemBlock", Model.ItemBlock[i])
+                            </td>
+                        </tr>
+                    }
+                }
+
+            }
+        }
+        @*若無資料顯示"尚未有商品上架"訊息*@
+        else
+        {
+            <tr>
+                <td colspan="4"> 尚未有商品上架 </td>
+
+            </tr>
+        }
+    </table>
+    @*若無登入狀態，無法使用此功能*@
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <text> 要使用購物車請先 </text>
+        @Html.ActionLink("登入", "Login", "Members")
+    }
+    @*當使用者為管理者，產生新增商品的超連結*@
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <a href="@Url.Action("Create")">
+            <input class="btn btn-primary" type="button" value="新增商品" />
+        </a>
+    }
+    @*產生頁碼按鈕*@
+    <div class="col-xs-12 text-center">
+        <ul class="pagination">
+            @*顯示上一頁與最前頁按鈕*@
+            <li class="first @((Model.Paging.NowPage > 1) ? "" : " disabled")">
+                @Ajax.ActionLink("<<", "Index", new { Page = 1 },
+                    new AjaxOptions
+                         {
+                             UpdateTargetId = "ItemList"
+                    ,
+                             InsertionMode = InsertionMode.Replace
+                         })
+            </li>
+            <li class="pervious @((Model.Paging.NowPage > 1) ? "" : " disabled")">
+                @Ajax.ActionLink("<", "Index", new { Page = Model.Paging.NowPage - 1 },
+                    new AjaxOptions
+                         {
+                             UpdateTargetId = "ItemList"
+                    ,
+                             InsertionMode = InsertionMode.Replace
+                         })
+            </li>
+            @*顯示各個頁次按鈕*@
+            @for (var page = (Model.Paging.NowPage - 6);
+                            page < (Model.Paging.NowPage + 6); page++)
+            {
+                if ((page > 0) && (page <= Model.Paging.MaxPage))
+                {
+                    if (page == Model.Paging.NowPage)
+                    {
+                        <li class="active">
+                            <a href="#">@page</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Ajax.ActionLink(page.ToString(), "Index", new { Page = page },
+                                new AjaxOptions
+                                     {
+                                         UpdateTargetId = "ItemList"
+                                ,
+                                         InsertionMode = InsertionMode.Replace
+                                     })
+                        </li>
+                    }
+                }
+            }
+            @*顯示下一頁與最後一頁的按鈕*@
+            <li class="next @(((Model.Paging.NowPage < Model.Paging.MaxPage)
+        ? "" : " disabled"))">
+                @Ajax.ActionLink(">", "Index", new { Page = Model.Paging.NowPage + 1 },
+                    new AjaxOptions
+                         {
+                             UpdateTargetId = "ItemList"
+                    ,
+                             InsertionMode = InsertionMode.Replace
+                         })
+            </li>
+            <li class="last @(((Model.Paging.NowPage < Model.Paging.MaxPage)
+        ? "" : " disabled"))">
+                @Ajax.ActionLink(">>", "Index", new { Page = Model.Paging.MaxPage },
+                    new AjaxOptions
+                         {
+                             UpdateTargetId = "ItemList"
+                    ,
+                             InsertionMode = InsertionMode.Replace
+                         })
+            </li>
+        </ul>
+    </div>
+</div>

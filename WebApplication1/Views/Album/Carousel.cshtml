@@ -1,0 +1,48 @@
+﻿@model WebApplication1.ViewModels.AlbumViewModel
+@{
+    ViewBag.Title = "相片輪播";
+    int count = (Model.FileList != null) ? Model.FileList.Count : 0;
+}
+
+@section scripts
+{
+    @*匯入驗證與AJAX所須的JavaScript*@
+    @Scripts.Render("~/bundles/jqueryval")
+    @*匯入本頁面的JavaScript*@
+    @Scripts.Render("~/jQuery/Album/AlbumCarousel.js")
+}
+@Styles.Render("~/Content/AlbumCarousel.css")
+@*標題文字*@
+<div class="page-header">
+    <h1>相片輪播</h1>
+</div>
+@*載入圖片輪播內容*@
+<div id="AlbumListBlock">
+    @*透過hidden標籤，紀錄圖片的總數，可透過jQuery取用*@
+    @Html.Hidden("count", count)
+    <div class="myCarousel">
+        <div class="carousel_container">
+            @*若資料庫中有相片資料，將會列出相片資料*@
+            @if (!Model.FileList.Count.Equals(0))
+            {
+                foreach (var item in Model.FileList)
+                {
+                    <div class="carousel_content">
+                        <img src="@Url.Content("~/Upload/" + item.FileName)" />
+                    </div>
+                }
+            }
+        </div>
+        <ul class="carousel_control">
+            @if (!Model.FileList.Count.Equals(0))
+            {
+                foreach (var item in Model.FileList)
+                {
+                    <li></li>
+                }
+            }
+        </ul>
+        <div class="carousel_previous"><</div>
+        <div class="carousel_next">></div>
+    </div>
+</div>
